@@ -21,31 +21,35 @@ router.post('/', function(req, res) {
     var nroExp = req.body.nroExp;
     var ramo = req.body.ramo;
 
-    //SI ESTA LOGUEADO
     if (req.session.user) {
-    //BUSCA LAS EMPRESAS QUE TENGAN EL RAMO BUSCADO    
-    var buscar = "%"+ramo+"%";
-    pool.query('SELECT idEmpresa FROM proveeores WHERE ramo LIKE ?',[buscar], (err, results) => {
-    //ENVIO DE ERRORES
-    if(err) throw err;                  
-    //SI NO ENCUENTRA RESULTADOS
-    if (results.length == 0){
-        console.log('no hay empresas en este rubro')
-    res.render("armar", { 'mensaje' : 'No hay empresas en ese ramo', 'usuario' : req.session.user})
-    //SI ENCUENTRA RESULTADOS
-    } else {
-        //GUARDA LAS EMPRESAS EN EL EXPEDIENTE
-        for (var i = 0; i < results.length; i++){
-            var empresa = results[i].idEmpresa;
-            pool.query('INSERT INTO listadoexpediente(nroExpediente, idEmpresa) VALUES (?, ?)', [nroExp, empresa], (err, results) => {
-            if(err) throw err;
-            console.log('Empresa Agregada')     
-            })
-        }
-        res.redirect("/armar/"+nroExp)
-    }
+    pool.query('SELECT nroExpediente FROM listadoexpediente WHERE nroExpediente = ?', [nroExp], function (error, results, fields) {
+        if (error) throw error;
+        if(results.length == 0){
+            pool.query('SELECT idEmpresa FROM proveeores WHERE ramo LIKE ?',["%"+ramo+"%"], (err, results) => {
 
-});
+                if(err) throw err;                  
+            
+                if (results.length == 0){
+                res.render("armar", { 'mensaje' : 'No hay empresas en ese ramo', 'usuario' : req.session.user})
+            
+                } else {
+                    //GUARDA LAS EMPRESAS EN EL EXPEDIENTE
+                    for (var i = 0; i < results.length; i++){
+                        var empresa = results[i].idEmpresa;
+                        pool.query('INSERT INTO listadoexpediente(nroExpediente, idEmpresa) VALUES (?, ?)', [nroExp, empresa], (err, results) => {
+                        if(err) throw err;
+                        })
+                    }
+                    res.redirect("/armar/"+nroExp)
+                }
+            
+            });
+        } else {
+        //si existe el expediente
+        res.render("armar", { 'mensaje' : 'Ya existe el expediente', 'usuario' : req.session.user} )
+        }
+        });
+
     } else {
         //SI NO ESTAS LOGUEADO
         res.redirect('/');  

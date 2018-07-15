@@ -4,18 +4,6 @@ function eliminar(id, nroExp) {
    }
 }
 
-function validarExp() {
-  alert("tu mama")}
-
-
-// function isLogged(usuario) {
-//     if(usuario) {
-//         console.log("usuario existe")
-//     } else {
-//         $('#myModal').modal('show');
-//     }
-// }
-
 $( function() {
   $( document ).ready(function() {
     var ramosEmpresas = [];
@@ -39,16 +27,19 @@ $( function() {
       var empresas = JSON.parse(data);
       for(var i = 0; i < empresas.length; i++ ) {
         nombresEmpresas.push(empresas[i].nombre)
-        console.log(nombresEmpresas)
       }
     }
  });
 
-    $( "#tags, #ramo" ).autocomplete({
+    $( "#tags" ).autocomplete({
       source: ramosEmpresas,
       select: function(event, ui) {   
           location.href="/ver/" + ui.item.value;
       }
+    });
+
+    $( "#ramo" ).autocomplete({
+      source: ramosEmpresas
     });
 
     $( "#agregaEmpresa, #buscadorModif" ).autocomplete({
