@@ -37,7 +37,7 @@ router.get('/:empresa', function(req, res) {
             } 
         });
     } else {
-        res.render('index', {});  
+        res.render('index');  
     }
 })
 
