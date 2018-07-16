@@ -17,28 +17,32 @@ router.post('/enviar', function(req, res) {
         var correoC = req.body.emailContacto;
         var consultaC = req.body.consultaContacto;
 
-        console.log(nombreC + correoC + consultaC)
-        nodemailer.createTestAccount((err, account) => {
-            // create reusable transporter object using the default SMTP transport
-            let transporter = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                        user: 'cersosimof88@gmail.com',
-                        pass: 'nodejsjs'
-                    }
-                });
+        var transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                   user: 'cersosimof88@gmail.com',
+                   pass: 'huevodepascua'
+               },
+            tls: {
+                rejectUnauthorized: false
+            }
+           });
         
-            // setup email data with unicode symbols
-            let mailOptions = {
-                from: '"Fred Foo 👻" <foo@example.com>', // sender address
-                to: 'cersosimo.facundo@gmail.com', // list of receivers
-                subject: 'Hello ✔', // Subject line
-                text: 'Hello world?', // plain text body
-                html: '<b>Hello world?</b>' // html body
-            };
- 
+           const mailOptions = {
+            from: 'sender@email.com', // sender address
+            to: 'cersosimo.facundo@gmail.com', // list of receivers
+            subject: 'Subject of your email', // Subject line
+            html: '<p>Your html here</p>'// plain text body
+          };
 
-        });
+          transporter.sendMail(mailOptions, function (err, info) {
+            if(err)
+              console.log(err)
+            else
+              console.log(info);
+         });
+
+
         res.redirect("/")
     } else {
         res.render('index')
