@@ -23,7 +23,7 @@ router.post('/', function(req, res) {
     pool.query('SELECT * FROM usuarios WHERE user = ? AND pass = ?',[user, pass], (err, results) => {
         if(err) throw err;                      
         if (results.length == 0){
-        res.render('errorlog');
+        res.render('errorlog', { 'mensaje' : 'Usuario o contraseña incorrectos'});
         } else {
         //creamos las variables de session con los datos del formulario
         req.session.user=req.body.user;

@@ -20,6 +20,7 @@ var contactoRuta = require('./routes/contacto');
 var modifRuta = require('./routes/modificar')
 var buscarRamo = require('./public/javascripts/buscarRamos.js')
 var buscarEmpresa = require('./public/javascripts/buscarEmpresa.js')
+var crearUsuario = require('./public/javascripts/crearUsuario.js')
 var armarRuta = require('./routes/armar')
 var agregarRuta = require('./public/javascripts/agregarEmpresa.js')
 var eliminarRuta = require('./public/javascripts/eliminarEmpresa.js')
@@ -51,7 +52,9 @@ app.post('/buscarEmpresas', buscarEmpresa )
 app.use('/armar', armarRuta)
 app.post('/agregar', agregarRuta)
 app.get('/eliminar/:nroExp/:id', eliminarRuta)
-// app.use('/modificar/:empresa', modifRuta)
+app.post('/crearUsuario', crearUsuario)
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
